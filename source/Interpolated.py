@@ -31,17 +31,5 @@ class Interpolated:
     def build_0_matrix(self):
         """ Creates an n x (n+1) matrix of zeros
         """
-        i = len(self.nodes)
-        j = len(self.nodes) + 1
-        matrix = [[0 for _ in range(j)] for _ in range(i)]
-        return matrix
-        
-
-nodos = [(5,4),(6,3),(9,1)]
-
-interpolator = Interpolated(nodos)
-
-m = interpolator.divided_difference()
-
-for row in m:
-    print(row)
+        n = len(self.nodes)
+        return  [[0.0 for _ in range(n+1)] for _ in range(n)]

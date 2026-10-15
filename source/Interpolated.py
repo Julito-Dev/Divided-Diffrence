@@ -23,21 +23,10 @@ class Interpolated:
     
 
     def getXs(self):
-        Xs = []
-        for node in self.nodes:
-            for number in node:
-                if number//2 == 0:
-                    Xs.append(number)
-        return Xs 
-    
+        return [node[0] for node in self.nodes]
     
     def getYs(self):
-        Ys = []
-        for node in self.nodes:
-            for number in node:
-                if number//2 != 0:
-                    Ys.append(number)
-        return Ys
+        return [node[1] for node in self.nodes]
     
     def build_0_matrix(self):
         """ Creates an n x (n+1) matrix of zeros

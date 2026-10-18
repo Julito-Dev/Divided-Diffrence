@@ -2,9 +2,107 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Divided Differences Method</title>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <h1>Divided Differences</h1>
+    <header>
+        <h1>Método de Diferencias Divididas</h1>
+    </header>
+
+    <div class="contenedor">
+        <div class="panel">
+            <h2>Agregar nodos</h2>
+
+            <label for="x">X</label>
+            <input type="number" step="any" id="x">
+
+            <label for="y">Y</label>
+            <input type="number" step="any" id="y">
+
+            <button type="button" id="btnAgregar">Agregar nodo</button>
+
+            <ul id="lista"></ul>
+
+            <p class="error" id="error"></p>
+        </div>
+
+        <div class="plano">
+            <canvas id="plano"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const nodos = [];
+        const errorEl = document.getElementById("error");
+
+        const chart = new Chart(document.getElementById("plano"), {
+            type: "scatter",
+            data: {
+                datasets: [{
+                    label: "Nodos",
+                    data: [],
+                    backgroundColor: "#2563eb",
+                    pointRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: "linear",
+                        position: "bottom",
+                        title: { display: true, text: "X" }
+                    },
+                    y: {
+                        type: "linear",
+                        title: { display: true, text: "Y" }
+                    }
+                }
+            }
+        });
+
+        function agregar() {
+            errorEl.textContent = "";
+            const vx = document.getElementById("x").value;
+            const vy = document.getElementById("y").value;
+
+            if (vx === "" || vy === "") {
+                errorEl.textContent = "Ingresa X e Y.";
+                return;
+            }
+
+            const px = Number(vx);
+            const py = Number(vy);
+
+            if (nodos.some(n => n.x === px)) {
+                errorEl.textContent = "Las coordenadas X deben ser distintas.";
+                return;
+            }
+
+            nodos.push({ x: px, y: py });
+            chart.data.datasets[0].data = [...nodos];
+            chart.update();
+
+            const lista = document.getElementById("lista");
+            lista.innerHTML = nodos.map(n => `<li>(${n.x}, ${n.y})</li>`).join("");
+
+            document.getElementById("x").value = "";
+            document.getElementById("y").value = "";
+            document.getElementById("x").focus();
+        }
+
+        document.getElementById("btnAgregar").addEventListener("click", agregar);
+
+        document.getElementById("y").addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                agregar();
+            }
+        });
+    </script>
 </body>
 </html>
